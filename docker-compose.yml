@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  bot:
+    build: .
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - ./redisdata:/data
+    command: >
+      redis-server --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redis_data:
