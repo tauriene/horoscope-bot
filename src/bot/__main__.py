@@ -46,7 +46,7 @@ async def main():
 
     scheduler.add_job(
         send_daily_horoscope,
-        trigger=CronTrigger(hour=0, minute=0),
+        trigger=CronTrigger(hour=0, minute=0, timezone=ZoneInfo('Europe/Moscow')),
         kwargs={
             "bot": bot,
             "redis_client": redis_client,
