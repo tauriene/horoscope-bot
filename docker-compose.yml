@@ -6,6 +6,7 @@ services:
     depends_on:
       redis:
         condition: service_healthy
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
@@ -20,6 +21,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    restart: unless-stopped
 
 volumes:
   redis-data:
