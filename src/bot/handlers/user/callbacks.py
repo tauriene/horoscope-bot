@@ -1,10 +1,11 @@
 import json
+from zoneinfo import ZoneInfo
 
 from aiogram import Router, F, html
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-from datetime import date
+from datetime import datetime
 
 from redis.asyncio import Redis
 
@@ -32,7 +33,8 @@ async def horoscope_cb(
         horoscope = await horoscope_client.get_horoscope_text(cb.data)
         await set_cached_horoscope(redis_client, cb.data, horoscope)
 
-    date_today = date.today().strftime("%d.%m.%Y")
+    tz = ZoneInfo('Europe/Moscow')
+    date_today = datetime.now(tz).date().strftime("%d.%m.%Y")
 
     msg_text = (
         f"✨ Гороскоп на {date_today} для: {html.bold(' '.join(get_sign_data(cb.data)))}\n\n"
