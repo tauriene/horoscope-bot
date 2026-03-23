@@ -24,7 +24,7 @@ async def start_msg(msg: Message):
         f"{html.bold('Выбирай, с чего начнём:')}\n"
         "/horoscope — гороскоп на сегодня\n"
         "/compatibility — совместимость знаков\n"
-        "/schedule — настроить ежедневный гороскоп"
+        "/subscribe — настроить ежедневный гороскоп"
     )
 
 

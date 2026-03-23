@@ -1,11 +1,12 @@
 from aiogram import Router, Bot, html
 from redis.asyncio import Redis
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from .user import router as user_router
-from ..clients import HoroscopeApiClient
-from ..services import get_cached_horoscope, set_cached_horoscope
-from ..utils.helpers import get_sign_data
+from bot.clients import HoroscopeApiClient
+from bot.services import get_cached_horoscope, set_cached_horoscope
+from bot.utils.helpers import get_sign_data
 
 main_router = Router()
 
@@ -13,7 +14,7 @@ main_router.include_routers(user_router)
 
 
 async def send_daily_horoscope(
-    bot: Bot, redis_client: Redis, horoscope_client: HoroscopeApiClient
+        bot: Bot, redis_client: Redis, horoscope_client: HoroscopeApiClient
 ):
     users = await redis_client.hgetall("horoscope_subscriptions")
     for user_id, sign in users.items():
@@ -23,7 +24,8 @@ async def send_daily_horoscope(
                 horoscope = await horoscope_client.get_horoscope_text(sign)
                 await set_cached_horoscope(redis_client, sign, horoscope)
 
-            date_today = date.today().strftime("%d.%m.%Y")
+            tz = ZoneInfo('Europe/Moscow')
+            date_today = datetime.now(tz).date().strftime("%d.%m.%Y")
 
             msg_text = (
                 f"🔮 Ежедневный гороскоп (чтобы отменить подписку отправьте /subscribe)!\n\n"
