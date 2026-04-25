@@ -26,6 +26,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+
+
+
 async def main():
     bot = Bot(config.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
